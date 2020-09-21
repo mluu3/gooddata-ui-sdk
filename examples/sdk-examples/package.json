@@ -141,6 +141,6 @@
         "examples-testcafe-ci": "./scripts/run-testcafe.sh ci",
         "refresh-ldm": "./scripts/refresh-ldm.sh && npm run build",
         "refresh-examplesjs": "bash ./scripts/refresh-examplesJS.sh",
-        "heroku-postbuild": "npm run build developer"
+        "heroku-postbuild": "npm run build stg3"
     }
 }
