@@ -52,6 +52,10 @@ import HeatmapExampleSRCJS from "!raw-loader!../../../examplesJS/basic//HeatmapE
 import HeadlineExampleSRCJS from "!raw-loader!../../../examplesJS/basic/HeadlineExample";
 import KpiExampleSRCJS from "!raw-loader!../../../examplesJS/basic/KpiExample";
 
+import { UnControlled as CodeMirror } from "react-codemirror2";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/material.css";
+
 export const BasicComponents: React.FC = () => (
     <div>
         <h1>Basic Components</h1>
@@ -69,7 +73,14 @@ export const BasicComponents: React.FC = () => (
             source={BarChartExampleSRC}
             sourceJS={BarChartExampleSRCJS}
         />
-
+        <CodeMirror
+            value={BarChartExampleSRC}
+            options={{
+                mode: "typescript",
+                theme: "material",
+                lineNumbers: true,
+            }}
+        />
         <hr className="separator" />
 
         <h2 id="column-chart">Column chart</h2>
