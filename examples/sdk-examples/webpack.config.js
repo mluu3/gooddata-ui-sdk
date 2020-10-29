@@ -112,6 +112,7 @@ module.exports = async (env, argv) => {
         },
         devtool: isProduction ? false : "cheap-module-source-map",
         node: {
+            fs: "empty",
             __filename: true,
         },
         resolve: {

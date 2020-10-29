@@ -1,12 +1,19 @@
 // (C) 2007-2019 GoodData Corporation
-/* eslint-disable react/jsx-closing-tag-location */
 import React, { useState } from "react";
 import { SourceContainer } from "./SourceContainer";
-
+import { UnControlled as CodeMirror } from "react-codemirror2";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/material.css";
+import fs from "fs";
 interface IExampleWithSourceProps {
     for: React.ComponentType;
     source: string;
     sourceJS?: string;
+}
+
+export interface ICodeMirrorProps {
+    runCode: boolean;
+    code: string;
 }
 
 export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
@@ -16,10 +23,27 @@ export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
 }) => {
     const [hidden, setState] = useState<boolean>(true);
     const [viewJS, setViewJS] = useState<boolean>(true);
+    const [props, setProps] = useState<ICodeMirrorProps>({
+        runCode: false,
+        code: source,
+    });
     const toggle = () => setState(!hidden);
+    const runCode = () => {
+        // @ts-ignore
+        const dir = "./TryYourCode.tsx";
+        fs.writeFile(dir, props.code, (err) => {
+            // throws an error, you could also catch it here
+            if (err) throw err;
+
+            // success case, the file was saved
+            console.log("Lyric saved!");
+        });
+        setProps({ runCode: false, code: props.code });
+    };
     const switchLang = (switchToJS: boolean) => setViewJS(switchToJS);
     const iconClassName = hidden ? "icon-navigatedown" : "icon-navigateup";
 
+    // @ts-ignore
     return (
         <div className="example-with-source">
             <style jsx>{`
@@ -56,16 +80,39 @@ export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
                 >
                     source code
                 </button>
+                <button className={`gdc-button button-run`} onClick={runCode}>
+                    run code
+                </button>
                 {hidden ? (
                     ""
                 ) : (
-                    <SourceContainer
-                        toggleIsJS={switchLang}
-                        isJS={viewJS}
-                        source={source}
-                        sourceJS={sourceJS}
-                    />
+                    <div>
+                        <SourceContainer
+                            toggleIsJS={switchLang}
+                            isJS={viewJS}
+                            source={source}
+                            sourceJS={sourceJS}
+                        />
+                    </div>
                 )}
+                <CodeMirror
+                    value={props.code}
+                    options={{
+                        mode: "typescript",
+                        theme: "material",
+                        lineNumbers: true,
+                    }}
+                    //@ts-ignore
+                    onChange={(editor, data, value) => {
+                        setProps({
+                            runCode: false,
+                            code: value,
+                        });
+                    }}
+                />
+                <div className="Output">
+                    <pre>{props.runCode && props.code}</pre>
+                </div>
             </div>
         </div>
     );
