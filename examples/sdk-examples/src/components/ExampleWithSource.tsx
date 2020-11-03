@@ -27,10 +27,12 @@ export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
         runCode: false,
         code: source,
     });
+
     const toggle = () => setState(!hidden);
     const runCode = () => {
         // @ts-ignore
-        const dir = "./TryYourCode.tsx";
+        setProps({ runCode: true, code: props.code });
+        const dir = "webpack:///src/components/Menu.tsx";
         fs.writeFile(dir, props.code, (err) => {
             // throws an error, you could also catch it here
             if (err) throw err;
@@ -38,7 +40,6 @@ export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
             // success case, the file was saved
             console.log("Lyric saved!");
         });
-        setProps({ runCode: false, code: props.code });
     };
     const switchLang = (switchToJS: boolean) => setViewJS(switchToJS);
     const iconClassName = hidden ? "icon-navigatedown" : "icon-navigateup";

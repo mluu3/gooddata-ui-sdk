@@ -69,7 +69,6 @@ export const BasicComponents: React.FC = () => (
             source={BarChartExampleSRC}
             sourceJS={BarChartExampleSRCJS}
         />
-        <button>run code</button>
         <hr className="separator" />
 
         <h2 id="column-chart">Column chart</h2>
