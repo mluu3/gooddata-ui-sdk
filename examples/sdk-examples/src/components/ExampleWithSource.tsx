@@ -2,11 +2,12 @@
 import React, { useState, Component } from "react";
 import { SourceContainer } from "./SourceContainer";
 import { UnControlled as CodeMirror } from "react-codemirror2";
-import { BubbleChartExample } from "../examples/basic/BubbleChartExample";
 import { ColumnChartExample } from "../examples/basic/ColumnChartExample";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import { BarChartExample } from "../examples/basic/BarChartExample";
+import { BarChartExampleWithOutViewBy } from "../examples/basic/BarChartExampleWithOutViewBy";
+import { ColumnChartExampleWithOutViewBy } from "../examples/basic/ColumnChartExampleWithOutViewBy";
 interface IExampleWithSourceProps {
     for: React.ComponentType;
     source: string;
@@ -24,12 +25,22 @@ export interface IReactNodeProps {
 
 class MyComponent extends Component<ICodeMirrorProps> {
     componentNames = {
-        BubbleChartExample: BubbleChartExample,
+        BarChartExampleWithOutViewBy: BarChartExampleWithOutViewBy,
         BarChartExample: BarChartExample,
         ColumnChartExample: ColumnChartExample,
+        ColumnChartExampleWithOutViewBy: ColumnChartExampleWithOutViewBy,
     };
     render() {
-        const TagName = this.componentNames["ColumnChartExample"];
+        let TagName: React.ComponentType;
+        if (this.props.code === "<BarChart measures={[LdmExt.TotalSales1]} viewBy={Ldm.LocationResort} />") {
+            TagName = this.componentNames["BarChartExample"];
+        } else if (this.props.code === "<BarChart measures={[LdmExt.TotalSales1]} />") {
+            TagName = this.componentNames["BarChartExampleWithOutViewBy"];
+        } else if (this.props.code === "<ColumnChart measures={[LdmExt.TotalSales1]} />") {
+            TagName = this.componentNames["ColumnChartExampleWithOutViewBy"];
+        } else {
+            TagName = this.componentNames["ColumnChartExample"];
+        }
         return <TagName />;
     }
 }

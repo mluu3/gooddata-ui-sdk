@@ -11,7 +11,6 @@ import "@gooddata/sdk-ui-pivot/styles/css/main.css";
 
 import { App } from "./App";
 import { AppProviders } from "./context";
-import * as serviceWorker from "./examples/codeMirror/serviceWorker";
 
 const root = document.createElement("div");
 root.className = "root";
@@ -22,4 +21,3 @@ ReactDOM.render(
     </AppProviders>,
     root,
 );
-serviceWorker.unregister();
