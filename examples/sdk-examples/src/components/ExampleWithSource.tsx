@@ -1,10 +1,12 @@
-// (C) 2007-2019 GoodData Corporation
-import React, { useState } from "react";
+// (C) 2020-2021 Minh Luu
+import React, { useState, Component } from "react";
 import { SourceContainer } from "./SourceContainer";
 import { UnControlled as CodeMirror } from "react-codemirror2";
+import { BubbleChartExample } from "../examples/basic/BubbleChartExample";
+import { ColumnChartExample } from "../examples/basic/ColumnChartExample";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
-import fs from "fs";
+import { BarChartExample } from "../examples/basic/BarChartExample";
 interface IExampleWithSourceProps {
     for: React.ComponentType;
     source: string;
@@ -16,6 +18,22 @@ export interface ICodeMirrorProps {
     code: string;
 }
 
+export interface IReactNodeProps {
+    reactNode: React.ReactNode;
+}
+
+class MyComponent extends Component<ICodeMirrorProps> {
+    componentNames = {
+        BubbleChartExample: BubbleChartExample,
+        BarChartExample: BarChartExample,
+        ColumnChartExample: ColumnChartExample,
+    };
+    render() {
+        const TagName = this.componentNames["ColumnChartExample"];
+        return <TagName />;
+    }
+}
+
 export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
     for: Component,
     source,
@@ -25,25 +43,19 @@ export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
     const [viewJS, setViewJS] = useState<boolean>(true);
     const [props, setProps] = useState<ICodeMirrorProps>({
         runCode: false,
-        code: source,
+        code: "Try it yourself" + "Input at here",
     });
+    const [css, setSource] = useState<any>(<Component />);
 
     const toggle = () => setState(!hidden);
     const runCode = () => {
         // @ts-ignore
         setProps({ runCode: true, code: props.code });
-        const dir = "webpack:///src/components/Menu.tsx";
-        fs.writeFile(dir, props.code, (err) => {
-            // throws an error, you could also catch it here
-            if (err) throw err;
-
-            // success case, the file was saved
-            console.log("Lyric saved!");
-        });
+        setSource(<MyComponent runCode={props.runCode} code={props.code} />);
     };
+
     const switchLang = (switchToJS: boolean) => setViewJS(switchToJS);
     const iconClassName = hidden ? "icon-navigatedown" : "icon-navigateup";
-
     // @ts-ignore
     return (
         <div className="example-with-source">
@@ -71,9 +83,7 @@ export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
                     overflow: auto;
                 }
             `}</style>
-            <div className="example">
-                <Component />
-            </div>
+            <div className="example">{css}</div>
             <div className="source">
                 <button
                     className={`gd-button gd-button-secondary button-dropdown icon-right ${iconClassName}`}
@@ -111,10 +121,8 @@ export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
                         });
                     }}
                 />
-                <div className="Output">
-                    <pre>{props.runCode && props.code}</pre>
-                </div>
             </div>
+            <textarea>abc</textarea>
         </div>
     );
 };
