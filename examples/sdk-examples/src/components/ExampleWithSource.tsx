@@ -32,6 +32,7 @@ class MyComponent extends Component<ICodeMirrorProps> {
     };
     render() {
         let TagName: React.ComponentType;
+        // React.createElement(this.componentNames["BarChartExample"], this.measure['asdasdasd'], this.attribute[''])
         if (this.props.code === "<BarChart measures={[LdmExt.TotalSales1]} viewBy={Ldm.LocationResort} />") {
             TagName = this.componentNames["BarChartExample"];
         } else if (this.props.code === "<BarChart measures={[LdmExt.TotalSales1]} />") {
@@ -133,7 +134,6 @@ export const ExampleWithSource: React.FC<IExampleWithSourceProps> = ({
                     }}
                 />
             </div>
-            <textarea>abc</textarea>
         </div>
     );
 };
